@@ -1,0 +1,34 @@
+{
+  "network": {
+    "httpServers": [
+      {
+        "name": "message",
+        "enable": true,
+        "port": 3000,
+        "host": "http://localhost",
+        "enableCors": true,
+        "enableWebsocket": true,
+        "messagePostFormat": "array",
+        "token": "",
+        "debug": false,
+        "type": "HTTP 服务器"
+      }
+    ],
+    "httpClients": [
+      {
+        "name": "http上报",
+        "enable": true,
+        "url": "http://localhost:8080",
+        "messagePostFormat": "array",
+        "reportSelfMessage": false,
+        "token": "",
+        "debug": false
+      }
+    ],
+    "websocketServers": [],
+    "websocketClients": []
+  },
+  "musicSignUrl": "",
+  "enableLocalFile2Url": false,
+  "parseMultMsg": true
+}

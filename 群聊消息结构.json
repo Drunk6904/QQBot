@@ -1,0 +1,29 @@
+{
+  "self_id": 310371967,
+  "user_id": 3202731886,
+  "time": 1732799667,
+  "message_id": 1710132568,
+  "message_seq": 1710132568,
+  "real_id": 1710132568,
+  "message_type": "group",
+  "sender": {
+    "user_id": 3202731886,
+    "nickname": "浊风",
+    "card": "",
+    "role": "owner"
+  },
+  "raw_message": "1",
+  "font": 14,
+  "sub_type": "normal",
+  "message": [
+    {
+      "type": "text",
+      "data": {
+        "text": "1"
+      }
+    }
+  ],
+  "message_format": "array",
+  "post_type": "message",
+  "group_id": 179968326
+}
