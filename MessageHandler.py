@@ -9,10 +9,10 @@ def checkAndReply(recv_msg):
     :param recv_msg: 接收到的消息字典
     :return:
     """
-    recv_msg = Message.Message(message=recv_msg)
-    if recv_msg.message_type == 'group':
+    recv_msg = Message.RecvMessage(message=recv_msg)
+    if recv_msg.getMessageType() == 'group':
         groupMessageHandler(recv_msg)
-    if recv_msg.message_type == 'private':
+    if recv_msg.getMessageType() == 'private':
         privateMessageHandler(recv_msg)
 
 
@@ -22,8 +22,8 @@ def sendMessage(send_message):
     """
     url = 'http://127.0.0.1:3000' + send_message.getPostUrl()
     time.sleep(1)
-    responses = requests.post(url=url, json=send_message.ToJson())
-    print(send_message.ToJson(), responses.json())
+    responses = requests.post(url=url, json=send_message.ToMessage())
+    print(send_message.ToMessage(), responses.json())
 
 
 def privateMessageHandler(recv_msg):
@@ -32,10 +32,10 @@ def privateMessageHandler(recv_msg):
     :param recv_msg: 接收到的消息字典
     :return:
     """
-    if recv_msg.message == 'help':
+    if recv_msg.getRawMessage() == 'help':
         # 回复帮助
-        send_msg = Message.Message(id=recv_msg.getSendMessageUserId(), message_type='private')
-        send_msg.addMessageData('text', "help")
+        send_msg = Message.SendMessage(id=recv_msg.getMessageSenderId(), message_type='private')
+        send_msg.AddMessageData('text', "help")
         sendMessage(send_msg)
 
 
@@ -46,8 +46,8 @@ def groupMessageHandler(recv_msg):
     :return:
     """
 
-    if recv_msg.message == 'help':
+    if recv_msg.getRawMessage() == 'help':
         # 回复帮助
-        send_msg = Message.Message(id=recv_msg.getMessageGroupId(), message_type='group')
-        send_msg.addMessageData('text', "help")
+        send_msg = Message.SendMessage(id=recv_msg.getGroupId(), message_type='group')
+        send_msg.AddMessageData('text', "help")
         sendMessage(send_msg)
