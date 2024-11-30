@@ -1,3 +1,5 @@
+import Message
+
 def isAtMe(message) -> bool:
     """ 判断是否被at """
     messages = message.getMessage()
@@ -10,10 +12,8 @@ def isAtMe(message) -> bool:
 
 def isComment(message) -> bool:
     """ 判断是否是命令 """
-    messages = message.getMessage()
+    messages = message.getRawMessage().split(' ')
     for msg in messages:
-        if msg.get('type') != 'text':
-            continue
-        if msg.get('data').get('text')[0] == '/':
+        if msg[0] == '/':
             return True
     return False

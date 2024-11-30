@@ -6,6 +6,9 @@ sys.path.append("../")
 
 import Message
 
+# 调用指令
+comment = ["gpt"]
+
 # api请求地址
 chat_api = "https://ark.cn-beijing.volces.com/api/v3/chat/completions"
 model_api = "https://ark.cn-beijing.volces.com/api/v3/bots/chat/completions"

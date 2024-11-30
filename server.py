@@ -1,6 +1,7 @@
 from flask import *
 
 import Message
+import Event
 import MessageHandler
 app = Flask(__name__)
 
@@ -15,4 +16,5 @@ def listen_message():
 
 
 if __name__ == '__main__':
+    Event.load_plugins()
     app.run(host='0.0.0.0', port=8080, debug=True)
