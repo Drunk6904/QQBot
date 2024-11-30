@@ -23,6 +23,8 @@ class Notify:
         self.sub_type = recv_notify.get('sub_type')  # 子类型
         self.target_id = recv_notify.get('target_id')  # 目标ID，通常是被戳的人的QQ号
         self.user_id = recv_notify.get('user_id')  # 发起戳一戳的用户的QQ号
-        self.group_id = recv_notify.get('group_id')  # 群号
         self.raw_info = recv_notify.get('raw_info')  # 原始信息
+        if 'group_id' in recv_notify.keys():
+            self.group_id = recv_notify.get('group_id')  # 群号
+
 
