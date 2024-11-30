@@ -1,13 +1,13 @@
 import time
 import Message
 import requests
+import Judge
+import gpt
 
 
 def checkAndReply(recv_msg):
     """
     检查消息类型 并交予相应函数
-    :param recv_msg: 接收到的消息字典
-    :return:
     """
     recv_msg = Message.RecvMessage(message=recv_msg)
     if recv_msg.getMessageType() == 'group':
@@ -23,16 +23,14 @@ def sendMessage(send_message):
     url = 'http://127.0.0.1:3000' + send_message.getPostUrl()
     time.sleep(1)
     responses = requests.post(url=url, json=send_message.ToMessage())
-    print(send_message.ToMessage(), responses.json())
+    print(responses.json())
 
 
 def privateMessageHandler(recv_msg):
     """
     处理通过私聊发送来的消息
-    :param recv_msg: 接收到的消息字典
-    :return:
     """
-    if recv_msg.getRawMessage() == 'help':
+    if recv_msg.getRawMessage() == '/help':
         # 回复帮助
         send_msg = Message.SendMessage(id=recv_msg.getMessageSenderId(), message_type='private')
         send_msg.AddMessageData('text', "help")
@@ -46,8 +44,17 @@ def groupMessageHandler(recv_msg):
     :return:
     """
 
-    if recv_msg.getRawMessage() == 'help':
+    if recv_msg.getRawMessage() == '/help':
         # 回复帮助
         send_msg = Message.SendMessage(id=recv_msg.getGroupId(), message_type='group')
         send_msg.AddMessageData('text', "help")
+        sendMessage(send_msg)
+    elif Judge.isAtMe(recv_msg):
+        # gpt回复
+        send_msg = Message.SendMessage(id=recv_msg.getGroupId(), message_type='group')
+        send_msg.AddMessageData('at', recv_msg.getSenderId())
+
+        post_gpt_message = recv_msg.getRawMessage().split(" ")[1]
+        gpt_message = gpt.post_message(post_gpt_message)
+        send_msg.AddMessageData('text', " " + gpt_message)
         sendMessage(send_msg)

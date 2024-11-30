@@ -25,6 +25,7 @@ class RecvMessage(Message):
     """
     MESSAGE_TYPE = ['group', 'private']
     message_type = None  # 消息类型 - 群聊消息/私聊消息
+    self_id = None  # 接收消息账号id
     sender = None  # 消息发送者
     sender_id = None  # 消息发送者id
     sender_name = None  # 消息发送者名称
@@ -45,6 +46,7 @@ class RecvMessage(Message):
         self.sender_id = message.get('sender').get('user_id')  # 消息发送者id
         self.sender_name = message.get('sender').get('nickname')  # 消息发送者名称
         self.message_card = message.get('sender').get('card')  # 消息发送者群名片
+        self.self_id = message.get('self_id')  # 自己的id
         if self.message_type == 'group':
             # 如果该消息来自群聊，补充群号属性
             self.group_id = message.get('group_id')
@@ -71,6 +73,14 @@ class RecvMessage(Message):
 
     def getMessageSenderId(self):
         # 获取消息发送者id
+        return self.sender_id
+
+    def getSelfId(self):
+        # 获取自己的账号
+        return str(self.self_id)
+
+    def getSenderId(self):
+        # 获取发送者id
         return self.sender_id
 
 
