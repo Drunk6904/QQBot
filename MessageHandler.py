@@ -1,4 +1,6 @@
 import time
+
+import Event
 import Message
 import requests
 import Judge
@@ -65,7 +67,6 @@ def insert_message(recv_msg, send_msg):
         return send_msg
     elif Judge.isComment(recv_msg):
         # 如果是评论命令，回复特定命令使用信息
-        send_msg.AddMessageData('text', "使用了...命令")
-
+        send_msg = Event.run(recv_msg, send_msg)
         return send_msg
     return None

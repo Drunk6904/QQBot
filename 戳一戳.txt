@@ -1,0 +1,38 @@
+{
+    "time": 1732966377,  # 时间戳
+    "self_id": 310371967,  # 机器人QQ号
+    "post_type": "notice",  # 事件类型：通知
+    "notice_type": "notify",  # 通知类型：通知
+    "sub_type": "poke",  # 子类型：戳一戳
+    "target_id": 310371967,  # 目标ID，通常是被戳的人的QQ号
+    "user_id": 3202731886,  # 发起戳一戳的用户的QQ号
+    "group_id": 179968326,  # 群号
+    "raw_info": [
+        {
+            "col": "1",
+            "nm": "",
+            "type": "qq",
+            "uid": "u_NJBGJodfcX3a2hhf_oh30Q"  # 被戳的用户信息
+        },
+        {
+            "jp": "https://zb.vip.qq.com/v2/pages/nudgeMall?_wv=2&actionId=0",
+            "src": "http://tianquan.gtimg.cn/nudgeaction/item/0/expression.jpg",
+            "type": "img"  # 图片信息
+        },
+        {
+            "txt": "戳了戳",
+            "type": "nor"  # 文本信息：戳了戳
+        },
+        {
+            "col": "1",
+            "nm": "",
+            "tp": "0",
+            "type": "qq",
+            "uid": "u_Ae3SjmzFbaEoP9IwXQSH7g"  # 发起戳一戳的用户信息
+        },
+        {
+            "txt": "",
+            "type": "nor"  # 空文本信息
+        }
+    ]
+}
