@@ -3,6 +3,7 @@ import time
 
 class MessageError(Exception):
     """消息错误类，用于处理消息错误"""
+
     def __init__(self, message):
         self.message = message
 
@@ -91,7 +92,9 @@ class SendMessage(Message):
     MESSAGE_TYPE = ['group', 'private']
     POST_URL = {
         'group': '/send_group_msg',
-        'private': '/send_private_msg'
+        'private': '/send_private_msg',
+        'group_poke': '/group_poke',
+        'private_poke': '/friend_poke'
     }
     message_type = None
     user_id = None  # 发送目标id
@@ -101,13 +104,16 @@ class SendMessage(Message):
         """ 初始化消息类 """
         super().__init__(message=list())
         self.message_type = message_type
-        if message_type == "group":
+        if message_type in ["group", "group_poke"]:
             self.group_id = id
-        elif message_type == "private":
+        elif message_type in ["private", "private_poke"]:
             self.user_id = id
 
     def ToMessage(self):
-        # 获取完整的符合发送格式的消息 - json
+        """
+        获取完整的符合发送格式的消息 - json
+        根据消息类型返回不同的消息体
+        """
         if self.message_type == "group":
             return {
                 "group_id": self.group_id,
@@ -118,10 +124,22 @@ class SendMessage(Message):
                 "user_id": self.user_id,
                 "message": self.message
             }
+        elif self.message_type == "group_poke":
+            return {
+                "group_id": self.group_id,
+                "user_id": self.user_id
+            }
+        elif self.message_type == "private_poke":
+            return {
+                "user_id": self.user_id
+            }
         return None
 
     def AddMessageData(self, type, data):
-        # 添加消息数据
+        """
+        添加消息数据
+        根据不同的消息类型，构造相应的消息数据结构
+        """
         if type == "text":
             self.message.append(
                 {
@@ -167,7 +185,12 @@ class SendMessage(Message):
                     }
                 }
             )
+        if type == "group_poke":
+            self.user_id = data
 
     def getPostUrl(self):
-        # 获取发送消息的url
+        """
+        获取发送消息的url
+        根据消息类型返回对应的发送url
+        """
         return self.POST_URL[self.message_type]
