@@ -4,7 +4,6 @@ import Event
 import Message
 import requests
 import Judge
-from plugins import gpt
 
 
 def checkAndReply(recv_msg):
@@ -63,7 +62,7 @@ def insert_message(recv_msg, send_msg):
     """    插入消息    """
     # 如果消息中@了机器人，则进行GPT回复
     if Judge.isAtMe(recv_msg):
-        send_msg = gpt.pluginRun(recv_msg, send_msg)
+        send_msg = Event.plugin_event['gpt']['event'].pluginRun(recv_msg, send_msg)
         return send_msg
     elif Judge.isComment(recv_msg):
         # 如果是评论命令，回复特定命令使用信息
