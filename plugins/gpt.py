@@ -1,4 +1,10 @@
+import sys
+
 import requests
+
+sys.path.append("../")
+
+import Message
 
 # api请求地址
 chat_api = "https://ark.cn-beijing.volces.com/api/v3/chat/completions"
@@ -16,6 +22,8 @@ headers = {
     "Authorization": f"Bearer {api_key}"
 }
 MAX_TOKENS = 100
+
+
 # 对话消息
 # message = []
 
@@ -41,6 +49,16 @@ def post_message(string):
     # message.append(message_format("assistant", response_content))
     print('ai：' + response_content)
     return response_content
+
+
+def pluginRun(recv_msg, send_msg) -> Message.SendMessage:
+    # 提取消息内容以发送给GPT模型
+    post_gpt_message = recv_msg.getRawMessage().split(" ")[1]
+    # 通过GPT模型获取回复消息
+    gpt_message = post_message(post_gpt_message)
+    # 将GPT回复的消息添加到回复消息中
+    send_msg.AddMessageData('text', gpt_message)
+    return send_msg
 
 
 if __name__ == '__main__':
