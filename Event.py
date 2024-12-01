@@ -61,7 +61,7 @@ def run(recv_msg, send_msg=None) -> Message.SendMessage:
     Message.SendMessage: 处理后的消息对象，准备发送给用户
     """
     # 如果接收到的消息对象是RecvMessage，则判断是否需要运行插件
-    if recv_msg is Message.RecvMessage:
+    if type(recv_msg) is Message.RecvMessage:
         # 提取接收到的消息中的评论内容
         comment = getComment(recv_msg)
 

@@ -28,7 +28,6 @@ def isAt(send_msg, recv_msg):
             # 如果不是自己被@，则发送戳一戳消息给被@的人
             send_msg = Message.SendMessage(recv_msg.getGroupId(), 'group_poke')
             send_msg.AddMessageData('group_poke', reply_id)
-
     return send_msg
 
 
@@ -36,14 +35,16 @@ def pluginRun(recv_msg, send_msg=None) -> Message.SendMessage:
     """
     插件运行入口，根据接收到的消息类型决定如何回复
     """
+
     # 判断接收到的消息类型是否为群聊消息
     if type(recv_msg) is Message.RecvMessage:
         if recv_msg.getMessageType() == 'group':
             # 如果是群聊消息，则检查是否有人被@
             send_msg = isAt(send_msg, recv_msg)
+            # 发送戳一戳消息
             return send_msg
 
-    # 判断接收到的通知类型是否为群聊戳一戳
+    # 判断接收到的消息类型是否为通知消息
     elif type(recv_msg) is Notify.Notify:
         if recv_msg.getReplyType() == 'group_poke':
             # 如果是群聊戳一戳，则发送相应的戳一戳消息
