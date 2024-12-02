@@ -36,9 +36,8 @@ def message_format(role, content):
     return {"role": role, "content": content}
 
 
-def post_message(string):
-    message = []
-    message.append(message_format("user", string))
+def post_message(content):
+    message = [message_format("user", content)]
     # 请求体
     data = {
         "model": model,
@@ -54,13 +53,32 @@ def post_message(string):
     return response_content
 
 
-def pluginRun(recv_msg, send_msg) -> Message.SendMessage:
+def pluginRun(recv_msg) -> Message.SendMessage:
+    """
+    处理接收到的消息并生成回复消息。
+
+    参数:
+    recv_msg: 接收到的消息对象，包含消息的各种信息。
+
+    返回:
+    Message.SendMessage: 准备发送的回复消息对象。
+    """
+    # 创建回复消息对象
+    send_msg = Message.SendMessage.createSendMessage(recv_msg)
+
+    # 对于群组消息，添加@发送者的数据
+    if recv_msg.getMessageType() == Message.Message.GROUP_MESSAGE:
+        send_msg.AddMessageData('at', recv_msg.getSenderId())
     # 提取消息内容以发送给GPT模型
     post_gpt_message = recv_msg.getRawMessage().split(" ")[1]
+
     # 通过GPT模型获取回复消息
     gpt_message = post_message(post_gpt_message)
+
     # 将GPT回复的消息添加到回复消息中
-    send_msg.AddMessageData('text', gpt_message)
+    send_msg.AddMessageData('text', '\n' + gpt_message)
+
+    # 返回构建好的回复消息对象
     return send_msg
 
 

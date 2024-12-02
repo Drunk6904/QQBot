@@ -1,5 +1,7 @@
 import time
 
+import Notify
+
 
 class MessageError(Exception):
     """消息错误类，用于处理消息错误"""
@@ -12,6 +14,9 @@ class Message:
     """
     消息类，用于封装消息
     """
+    GROUP_MESSAGE = 'group'
+    PRIVATE_MESSAGE = 'private'
+    MESSAGE_TYPE = [GROUP_MESSAGE, PRIVATE_MESSAGE]  # 消息类型
     message = None
     raw_message = None
 
@@ -28,7 +33,7 @@ class RecvMessage(Message):
     """
     接收到的消息类
     """
-    MESSAGE_TYPE = ['group', 'private']  # 消息类型
+
     message_type = None  # 消息类型 - 群聊消息/私聊消息
     self_id = None  # 接收消息账号id
     sender = None  # 消息发送者
@@ -108,13 +113,15 @@ class SendMessage(Message):
     """
     发送的消息类
     """
-    MESSAGE_TYPE = ['group', 'private']
+
     POST_URL = {
         'group': '/send_group_msg',
         'private': '/send_private_msg',
         'group_poke': '/group_poke',
         'private_poke': '/friend_poke'
     }
+    GROUP_POKE = 'group_poke'
+    PRIVATE_POKE = 'private_poke'
     message_type = None
     user_id = None  # 发送目标id
     group_id = None  # 群号
@@ -213,3 +220,22 @@ class SendMessage(Message):
         根据消息类型返回对应的发送url
         """
         return self.POST_URL[self.message_type]
+
+    @staticmethod
+    def createSendMessage(recv_msg):
+        """
+        创建发送消息对象
+        根据接收的消息对象，创建发送消息对象
+        """
+        # 初始化目标ID为空字符串
+        target_id = ""
+        send_msg = None
+        if type(recv_msg) is RecvMessage:
+            # 根据消息类型获取目标ID（群组ID或发送者ID）
+            if recv_msg.getMessageType() == Message.GROUP_MESSAGE:
+                target_id = recv_msg.getGroupId()
+            elif recv_msg.getMessageType() == Message.PRIVATE_MESSAGE:
+                target_id = recv_msg.getSenderId()
+            send_msg = SendMessage(target_id, recv_msg.getMessageType())
+        return send_msg
+

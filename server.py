@@ -1,7 +1,6 @@
 from flask import *
-
-import Message
 import Event
+import Message
 import MessageHandler
 from Notify import Notify
 
@@ -24,7 +23,8 @@ def listen_message():
 
     # 检查消息类型，如果为message'，则尝试回复消息
     if message.get('post_type') == 'message':
-        MessageHandler.checkAndReply(message)
+        message = Message.RecvMessage(message)
+        MessageHandler.MessageHandler(message)
     # 如果消息类型为notice'，则视为通知，并尝试运行相关事件
     elif message.get('post_type') == 'notice':
         # 将消息封装为Notify对象，以便进一步处理

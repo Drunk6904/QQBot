@@ -42,7 +42,7 @@ def load_plugins():
             print(e)
 
 
-def run(recv_msg, send_msg=None) -> Message.SendMessage:
+def run(recv_msg) -> Message.SendMessage:
     """
     运行插件
     根据接收到的消息判断是否需要运行插件，并返回处理后的消息
@@ -62,8 +62,8 @@ def run(recv_msg, send_msg=None) -> Message.SendMessage:
             for plugin in plugin_event.keys():
                 # 如果评论内容在当前插件的触发评论列表中，则运行该插件
                 if comment in plugin_event[plugin]["comment"]:
-                    send_msg = plugin_event[plugin]['event'].pluginRun(recv_msg, send_msg)
-
+                    send_msg = plugin_event[plugin]['event'].pluginRun(recv_msg)
+                    return send_msg
     # 如果接收到的消息对象是Notify类型
     elif type(recv_msg) is Notify.Notify:
         # 检查通知的子类型是否为poke（戳一戳），并且目标ID与自己的ID相同，并且不是自己发起的
@@ -73,7 +73,6 @@ def run(recv_msg, send_msg=None) -> Message.SendMessage:
             # 调用相应的插件处理此消息，并将处理结果存储在send_msg变量中
             send_msg = plugin_event['poke']['event'].pluginRun(recv_msg)
             return send_msg
-    return send_msg
 
 
 if __name__ == '__main__':

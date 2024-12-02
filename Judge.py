@@ -1,5 +1,6 @@
 import Message
 
+
 def isAtMe(message) -> bool:
     """ 判断是否被at """
     messages = message.getMessage()
