@@ -19,12 +19,16 @@ class Message:
         self.message = message
         self.raw_message = raw_message
 
+    def getMessage(self):
+        # 获取消息内容
+        return self.message
+
 
 class RecvMessage(Message):
     """
     接收到的消息类
     """
-    MESSAGE_TYPE = ['group', 'private']
+    MESSAGE_TYPE = ['group', 'private']  # 消息类型
     message_type = None  # 消息类型 - 群聊消息/私聊消息
     self_id = None  # 接收消息账号id
     sender = None  # 消息发送者
@@ -56,10 +60,6 @@ class RecvMessage(Message):
         # 获取消息类型
         return self.message_type
 
-    def getMessage(self):
-        # 获取消息内容
-        return self.message
-
     def getRawMessage(self):
         # 获取原始消息
         return self.raw_message
@@ -83,6 +83,25 @@ class RecvMessage(Message):
     def getSenderId(self):
         # 获取发送者id
         return self.sender_id
+
+    def getMessageSenderName(self):
+        # 获取消息发送者名称
+        return self.sender_name
+
+    def getMessageCard(self):
+        # 获取消息发送者群名片
+        return self.message_card
+
+    def getMessageTime(self):
+        # 获取消息发送时间
+        return self.time
+
+    def getComment(self):
+        """ 获取消息中的指令 """
+        for cmd in self.raw_message.split(' '):
+            if cmd[0] == '/':
+                return cmd[1:]
+        return None
 
 
 class SendMessage(Message):

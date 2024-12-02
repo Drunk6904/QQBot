@@ -42,14 +42,6 @@ def load_plugins():
             print(e)
 
 
-def getComment(recv_msg):
-    """ 获取消息中的指令 """
-    for cmd in recv_msg.getRawMessage().split(' '):
-        if cmd[0] == '/':
-            return cmd[1:]
-        return None
-
-
 def run(recv_msg, send_msg=None) -> Message.SendMessage:
     """
     运行插件
@@ -63,7 +55,7 @@ def run(recv_msg, send_msg=None) -> Message.SendMessage:
     # 如果接收到的消息对象是RecvMessage，则判断是否需要运行插件
     if type(recv_msg) is Message.RecvMessage:
         # 提取接收到的消息中的评论内容
-        comment = getComment(recv_msg)
+        comment = recv_msg.getComment()
 
         # 如果评论内容存在，则遍历所有插件事件，寻找匹配的插件
         if comment:
@@ -76,8 +68,8 @@ def run(recv_msg, send_msg=None) -> Message.SendMessage:
     elif type(recv_msg) is Notify.Notify:
         # 检查通知的子类型是否为poke（戳一戳），并且目标ID与自己的ID相同，并且不是自己发起的
         if recv_msg.getSubType() == 'poke' and \
-                str(recv_msg.getTargetId()) == str(recv_msg.getSelfId()) and\
-                recv_msg.getUserId() != recv_msg.getSelfId():     # 防止死循环
+                str(recv_msg.getTargetId()) == str(recv_msg.getSelfId()) and \
+                recv_msg.getUserId() != recv_msg.getSelfId():  # 防止死循环
             # 调用相应的插件处理此消息，并将处理结果存储在send_msg变量中
             send_msg = plugin_event['poke']['event'].pluginRun(recv_msg)
             return send_msg
